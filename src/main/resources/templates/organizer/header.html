@@ -1,0 +1,61 @@
+
+<header>
+    <!-- Fixed navbar -->
+    <div class="container">
+
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse container" id="navbarCollapse">
+
+                <ul class="navbar-nav mr-auto">
+
+                    <!--naslovna stranica-->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            Confoo
+                        </a>
+                    </li>
+
+                    <!--prikazi sljedeci link samo ako nitko nije ulogiran-->
+                    <li sec:authorize="!isAuthenticated()" class="nav-item" >
+                        <a class="nav-link" th:href="@{/user/register}">
+                            Organizer registration
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ORGANIZER')">
+                        <a class="nav-link" th:href="@{/organizer/conference/list}" >
+                            My conferences
+                        </a>
+                    </li>
+
+
+
+                </ul>
+
+
+                <div>
+                    <div sec:authorize="isAuthenticated()">
+                        <span class="text-white" sec:authentication="name">Username</span> &nbsp &nbsp
+                        <a href="/logout"><button class="btn" type="button">Logout</button></a>
+                    </div>
+
+                    <ul sec:authorize="!isAuthenticated()" class="navbar-nav mr-auto">
+                        <li class="nav-item" >
+                            <a class="nav-link" th:href="@{/login}">Login</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </nav>
+
+    </div>
+</header>
