@@ -6,7 +6,6 @@ import org.osc.oss.confoo.core.user.Role
 import org.osc.oss.confoo.core.user.User
 import org.osc.oss.confoo.dto.OrganizerDTO
 import org.osc.oss.confoo.dto.UserDTO
-import org.springframework.data.domain.PageRequest
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -17,13 +16,12 @@ import org.springframework.web.bind.annotation.*
 
 
 @Controller
-@RequestMapping("/organizer")
 @SessionAttributes("organizer")
 class OrganizerRegistrationController(private val organizerManager: OrganizerManager,
                                       private val passwordEncoder: PasswordEncoder,
                                       private val authenticationManager: AuthenticationManager) {
 
-    @GetMapping("/register")
+    @GetMapping("/organizer/register")
     fun showRegistrationForm(model: Model): String {
 
         val organizer = OrganizerDTO(0, "",  UserDTO(0, "", "", "", Role.ORGANIZER))
@@ -31,7 +29,7 @@ class OrganizerRegistrationController(private val organizerManager: OrganizerMan
         return "organizer/register"
     }
 
-    @PostMapping("/register")
+    @PostMapping("/organizer/register")
     fun processRegistrationForm (@ModelAttribute("organizer") dto: OrganizerDTO,
                                  @RequestParam password: String,
                                  @RequestParam passwordRetyped: String,
@@ -55,6 +53,6 @@ class OrganizerRegistrationController(private val organizerManager: OrganizerMan
         sc.authentication = auth
 
 
-        return "redirect:/organizer"
+        return "redirect:/organizer/conference/list"
     }
 }

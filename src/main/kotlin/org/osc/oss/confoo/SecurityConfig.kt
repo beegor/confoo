@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.crypto.password.StandardPasswordEncoder
 
 @EnableWebSecurity
 class SecurityConfig(val userManager: UserManager): WebSecurityConfigurerAdapter() {
@@ -27,7 +26,7 @@ class SecurityConfig(val userManager: UserManager): WebSecurityConfigurerAdapter
                 .antMatchers("/organizer/**").hasRole("ORGANIZER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
-                .formLogin()
+                .formLogin().loginPage("/login").permitAll()
     }
 
     @Autowired

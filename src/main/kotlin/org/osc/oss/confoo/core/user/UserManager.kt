@@ -9,4 +9,5 @@ interface UserManager: UserDetailsService {
     fun getAllUsers(pageable: Pageable) : Page<User>
     fun delete(userId: Long)
     fun getUser(userId: Long): User?
+    fun getLoggedInUser(): User?
 }

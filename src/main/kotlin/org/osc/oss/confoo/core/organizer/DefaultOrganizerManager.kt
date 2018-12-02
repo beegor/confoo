@@ -12,6 +12,10 @@ class DefaultOrganizerManager(private val repository: OrganizerRepository) : Org
         return repository.findById(organizerId).orElse(null)
     }
 
+    override fun getOrganizerForUser(userId: Long): Organizer? {
+        return repository.findByUserId(userId)
+    }
+
     override fun save(organizer: Organizer): Organizer {
         return repository.save(organizer)
     }

@@ -1,13 +1,15 @@
 package org.osc.oss.confoo.core.conference
 
+import org.osc.oss.confoo.core.Address
 import org.osc.oss.confoo.core.organizer.Organizer
-import java.time.Instant
+import org.osc.oss.confoo.core.track.Track
+import java.time.LocalDate
 import javax.persistence.*
 
 
 @Entity
 @Table(name = "conference")
-class Conference (
+class Conference(
 
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "conference_seq")
@@ -23,10 +25,16 @@ class Conference (
 
 
         @Column(name = "start_date")
-        val startDate: Instant,
+        val startDate: LocalDate,
 
         @Column(name = "end_date")
-        val endDate: Instant
+        val endDate: LocalDate,
 
+        @Embedded
+        val location: Address,
+
+        @ElementCollection
+        @CollectionTable(name="conference_tracks", joinColumns = [JoinColumn(name="conference_id")])
+        val tracks: List<Track>
 
 )

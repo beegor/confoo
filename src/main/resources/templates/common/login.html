@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="common/head.html"></head>
+<body>
+
+<header th:replace="organizer/header.html"></header>
+
+<div class="container">
+
+    <div class="card mx-auto" style="width: 40rem">
+
+        <h5 class="card-header">Login</h5>
+        <div class="card-body">
+            <form class="form-signin" method="post" action="/login">
+
+                <p>
+                    <label for="username" class="sr-only">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username"
+                           required autofocus/>
+                </p>
+                <p>
+                    <label for="password" class="sr-only">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                           required/>
+                </p>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </form>
+
+            <h5><br/>Don't have account? <a th:href="@{/organizer/register}">Register here</a></h5>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

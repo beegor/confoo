@@ -9,11 +9,23 @@
 <header th:replace="organizer/header.html"></header>
 
 <main class="container">
-    <div class="card mx-auto" style="width: 40rem">
+    <div class="card mx-auto">
 
-        <h5 class="card-header">User registration</h5>
+        <h5 class="card-header"><span th:text="${organizer.organizerName}">Organizer</span> Conferences</h5>
         <div class="card-body">
-            LIsta confi
+            <table class="table">
+                <tr th:each="con : ${conferences}">
+                    <td>
+                        <a th:href="@{/organizer/conference/edit/{id}(id=${con.id})}" th:text="${con.name}">Conference name</a>
+                    </td>
+                </tr>
+            </table>
+
+            <div>
+                <a th:href="@{/organizer/conference/add}">
+                <button class="btn btn-primary" type="button">Add conference</button>
+                </a>
+            </div>
         </div>
     </div>
 </main>

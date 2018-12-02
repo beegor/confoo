@@ -2,6 +2,7 @@ package org.osc.oss.confoo.core.user
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
@@ -30,5 +31,12 @@ class DefaultUserManager(private val repository: UserRepository) : UserManager {
 
     override fun delete(userId: Long){
         repository.deleteById(userId)
+    }
+
+    override fun getLoggedInUser(): User? {
+        val auth = SecurityContextHolder.getContext().authentication
+        if(auth.principal != null && auth.principal is User)
+            return auth.principal as User
+        return null
     }
 }

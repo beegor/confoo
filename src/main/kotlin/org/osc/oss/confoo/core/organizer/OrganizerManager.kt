@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable
 
 interface OrganizerManager {
     fun getOrganizer (organizerId: Long) : Organizer?
+    fun getOrganizerForUser (userId: Long) : Organizer?
     fun save(organizer: Organizer): Organizer
     fun delete(organizerId: Long)
     fun getAllOrganizers(pageable: Pageable) : Page<Organizer>
-
 
 }
