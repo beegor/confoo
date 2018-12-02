@@ -2,7 +2,9 @@ package org.osc.oss.confoo.core.lecture
 
 import org.osc.oss.confoo.core.conference.Conference
 import org.osc.oss.confoo.core.speaker.Speaker
+import org.osc.oss.confoo.core.track.Track
 import java.time.Instant
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -22,6 +24,9 @@ class Lecture (
         @JoinColumn(name = "speaker_id")
         val speaker: Speaker,
 
+        @Embedded
+        val track: Track,
+
         @Column(name = "title")
         val title: String,
 
@@ -33,7 +38,7 @@ class Lecture (
         val room: String,
 
         @Column(name = "start_time")
-        val startTime: Instant,
+        val startTime: LocalDateTime,
 
         @Column(name = "duration_minutes")
         val durationMinutes: Int,

@@ -6,7 +6,7 @@ import javax.persistence.Embeddable
 @Embeddable
 class Track (
 
-        @Column(name="index")
+        @Column(name="track_index")
         val index: Int,
 
         @Column(name = "track_name")

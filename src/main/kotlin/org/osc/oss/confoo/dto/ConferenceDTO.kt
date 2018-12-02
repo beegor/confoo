@@ -2,7 +2,6 @@ package org.osc.oss.confoo.dto
 
 import org.osc.oss.confoo.core.conference.Conference
 import org.osc.oss.confoo.core.organizer.Organizer
-import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 
 class ConferenceDTO (
@@ -11,24 +10,22 @@ class ConferenceDTO (
 
     var name: String,
 
-    val organizer: OrganizerDTO,
+    val description: String,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     var startDate: LocalDate,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     var endDate: LocalDate,
 
     val location: AddressDTO,
 
-    val tracks: List<TrackDTO>
+    val tracks: MutableList<TrackDTO>
 ) {
 
-    constructor(conference: Conference) : this(conference.id, conference.name, OrganizerDTO(conference.organizer), conference.startDate, conference.endDate, AddressDTO(conference.location), conference.tracks.map { TrackDTO(it) })
+    constructor(conference: Conference) : this(conference.id, conference.name, conference.description, conference.startDate, conference.endDate, AddressDTO(conference.location), conference.tracks.map { TrackDTO(it) }.toMutableList())
 
     companion object {
-        fun empty(organizer: OrganizerDTO):ConferenceDTO = ConferenceDTO(0, "", organizer, LocalDate.now(), LocalDate.now(), AddressDTO.empty(), listOf())
+        fun empty():ConferenceDTO = ConferenceDTO(0, "", "", LocalDate.now(), LocalDate.now(), AddressDTO.empty(), mutableListOf())
     }
 
-    fun toConference(organizer: Organizer) = Conference(id, name, organizer, startDate, endDate, location.toAddress(), tracks.map { it.toTrack() })
+    fun toConference(organizer: Organizer) = Conference(id, name, description, organizer, startDate, endDate, location.toAddress(), tracks.map { it.toTrack() }.toMutableList())
 }

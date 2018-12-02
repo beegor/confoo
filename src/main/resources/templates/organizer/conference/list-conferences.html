@@ -16,7 +16,7 @@
             <table class="table">
                 <tr th:each="con : ${conferences}">
                     <td>
-                        <a th:href="@{/organizer/conference/edit/{id}(id=${con.id})}" th:text="${con.name}">Conference name</a>
+                        <a th:href="@{/organizer/conference/{id}(id=${con.id})}" th:text="${con.name}">Conference name</a>
                     </td>
                 </tr>
             </table>

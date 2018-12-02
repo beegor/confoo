@@ -9,7 +9,12 @@ class TrackDTO (
 
         var name: String
 ) {
+
     constructor(track: Track): this(track.index, track.name)
 
     fun toTrack() = Track(index, name)
+
+    companion object {
+        fun empty() = TrackDTO(0, "")
+    }
 }

@@ -6,6 +6,7 @@ import org.osc.oss.confoo.core.user.UserManager
 import org.osc.oss.confoo.dto.ConferenceDTO
 import org.osc.oss.confoo.dto.OrganizerDTO
 import org.osc.oss.confoo.web.ForbiddenException
+import org.osc.oss.confoo.web.NoSuchResourceException
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -26,17 +27,28 @@ class OrganizerConferenceController(private val conferenceManager: ConferenceMan
         model.addAttribute("organizer", organizer)
         val conferenceList = conferenceManager.getConferenceList(organizer.id, PageRequest.of(page ?: 0, 10))
         model.addAttribute("conferences", conferenceList.map { ConferenceDTO(it) })
-        return "organizer/conference/list"
+        return "organizer/conference/list-conferences"
+    }
+
+    @GetMapping("/organizer/conference/{conferenceId}")
+    fun showConferenceDetails (model: Model,
+                               @PathVariable conferenceId: Long
+    ): String {
+        val loggedInUser = userManager.getLoggedInUser() ?: throw ForbiddenException()
+        val organizer = organizerManager.getOrganizerForUser(loggedInUser.id) ?: throw ForbiddenException()
+        val conference = conferenceManager.getConference(conferenceId) ?: throw NoSuchResourceException()
+        if (conference.organizer.id != organizer.id)
+            throw ForbiddenException()
+        model.addAttribute("conference", ConferenceDTO(conference))
+        return "organizer/conference/conference-details"
     }
 
 
 
     @GetMapping("/organizer/conference/add")
     fun showAddConferenceForm (model: Model): String {
-        val loggedInUser = userManager.getLoggedInUser() ?: throw ForbiddenException()
-        val organizer = organizerManager.getOrganizerForUser(loggedInUser.id) ?: throw ForbiddenException()
-        model.addAttribute("conference", ConferenceDTO.empty(OrganizerDTO(organizer)))
-        return "organizer/conference/edit"
+        model.addAttribute("conference", ConferenceDTO.empty())
+        return "organizer/conference/edit-conference"
     }
 
 
@@ -55,22 +67,20 @@ class OrganizerConferenceController(private val conferenceManager: ConferenceMan
     }
 
 
-    @GetMapping("/organizer/conference/edit/{conferenceId}")
+    @GetMapping("/organizer/conference/{conferenceId}/edit")
     fun showEditConferenceForm (@PathVariable conferenceId: Long,
                                 model: Model): String {
         val loggedInUser = userManager.getLoggedInUser() ?: throw ForbiddenException()
         val organizer = organizerManager.getOrganizerForUser(loggedInUser.id) ?: throw ForbiddenException()
-        val conference = conferenceManager.getConference(conferenceId)
-        if (conference != null) {
-            if (conference.organizer.id != organizer.id)
-                throw ForbiddenException()
-            model.addAttribute("conference", ConferenceDTO(conference))
-        }
-        return "organizer/conference/edit"
+        val conference = conferenceManager.getConference(conferenceId) ?: throw NoSuchResourceException()
+        if (conference.organizer.id != organizer.id)
+            throw ForbiddenException()
+        model.addAttribute("conference", ConferenceDTO(conference))
+        return "organizer/conference/edit-conference"
     }
 
 
-    @PostMapping("/organizer/conference/edit/{conferenceId}")
+    @PostMapping("/organizer/conference/{conferenceId}/edit")
     fun processEditConferenceForm(@ModelAttribute("conference") conferenceDTO: ConferenceDTO,
                                   @PathVariable conferenceId : Long,
                                   model: Model,
@@ -80,7 +90,8 @@ class OrganizerConferenceController(private val conferenceManager: ConferenceMan
         val organizer = organizerManager.getOrganizerForUser(loggedInUser.id) ?: throw ForbiddenException()
         val conference = conferenceDTO.toConference(organizer)
         conferenceManager.save(conference)
-        return "redirect:/organizer/conference/list"
+        ss.setComplete()
+        return "redirect:/organizer/conference/${conference.id}"
     }
 
 }

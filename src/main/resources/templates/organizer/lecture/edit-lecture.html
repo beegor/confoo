@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="organizer/head.html"></head>
+
+<body>
+
+<header th:replace="organizer/header.html"></header>
+
+<main class="container">
+
+    <!--/*@thymesVar id="lecture" type="org.osc.oss.confoo.dto.LectureDTO"*/-->
+    <!--/*@thymesVar id="speakers" type="java.util.List<org.osc.oss.confoo.dto.SpeakerDTO>"*/-->
+
+    <div class="card mx-auto" style="width: 40rem">
+
+        <h5 class="card-header">Lecture data</h5>
+        <div class="card-body">
+
+            <form th:object="${lecture}" method="post">
+
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Track</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" th:field="*{trackIndex}" onchange="trackChanged(this.value)">
+                            <option value="-1">--</option>
+                            <option th:each="tr: ${conference.tracks}" th:value="${tr.index}" th:text="${tr.name}"></option>
+                            <option value="-2">Add new track</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Speaker</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" th:field="*{speaker}" onchange="speakerChanged(this.value)">
+                            <option value="-1">--</option>
+                            <option th:each="sp: ${speakers}" th:value="${sp.id}" th:text="${sp.name}"></option>
+                            <option value="0">Add new speaker</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Title</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" th:field="*{title}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Summary</label>
+                    <div class="col-sm-8">
+                        <textarea  class="form-control" th:field="*{summary}" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Room</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" th:field="*{room}"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Start time</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" th:field="*{startTime}"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Duration (minutes)</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" readonly="readonly" th:field="*{durationMinutes}"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Audience level</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" th:field="*{targetAudienceLevel}">
+                            <option th:each="al: ${T(org.osc.oss.confoo.core.lecture.AudienceLevel).values()}" th:value="${al.name()}" th:text="${al.name()}"></option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                    <h4>There are some errors in your form</h4>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+
+            </form>
+        </div>
+    </div>
+
+</main>
+<footer th:replace="organizer/footer.html"></footer>
+
+<!-- Modal -->
+<div class="modal fade" id="addSpeakerModal" tabindex="-1" role="dialog" aria-labelledby="addSpeakerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSpeakerModalLabel">Add new speaker</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{/organizer/conference/{confId}/lecture/speaker/add(confId=${conference.id})}" method="post" id="addSpeakerForm">
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">First and last name</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Short bio</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" name="bio"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addTrackModal" tabindex="-1" role="dialog" aria-labelledby="addTrackModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTrackModalLabel">Add new track</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{/organizer/conference/{confId}/lecture/track/add(confId=${conference.id})}" method="post" id="addTrackForm">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Track name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="name">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#startTime').datetimepicker({format: "YYYY-MM-DD HH:mm", ignoreReadonly: true });
+
+        $("#addSpeakerForm").ajaxForm({
+            success: function(response, statusText, xhr, $form){
+                var o = new Option(response.name, response.id, false, true);
+                $(o).html(response.name);
+                $("#speaker").append(o);
+                $("#addSpeakerModal").modal("hide");
+            }
+        });
+
+        $("#addTrackForm").ajaxForm({
+            success: function(response, statusText, xhr, $form){
+                var o = new Option(response.name, response.index, false, true);
+                $(o).html(response.name);
+                $("#track").append(o);
+                $("#addTrackModal").modal("hide");
+            }
+        });
+    });
+
+    function speakerChanged(speakerSelectValue){
+        if (speakerSelectValue == 0)
+            $("#addSpeakerModal").modal("show");
+    }
+
+    function trackChanged(trackSelectValue){
+        if (trackSelectValue == -2)
+            $("#addTrackModal").modal("show");
+    }
+
+</script>
+
+</body>
+</html>

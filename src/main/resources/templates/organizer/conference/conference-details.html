@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="organizer/head.html"></head>
+
+<body>
+
+<header th:replace="organizer/header.html"></header>
+
+<main class="container">
+
+    <!--/*@thymesVar id="conference" type="org.osc.oss.confoo.core.conference.Conference"*/-->
+
+    <div class="card mx-auto" style="width: 40rem">
+
+        <h5 class="card-header">Conference data</h5>
+        <div class="card-body">
+
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Conference name</label>
+                <div class="col-sm-8">
+                    <span th:text="${conference.name}"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Short description</label>
+                <div class="col-sm-8">
+                    <p th:text="${conference.description}">Description</p>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Start date</label>
+                <div class="col-sm-8">
+                    <span th:text="${conference.startDate}"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">End date</label>
+                <div class="col-sm-8">
+                    <span th:text="${conference.endDate}"></span>
+                </div>
+            </div>
+
+
+            <hr/>
+            <h6 class="card-title">Location</h6>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Country</label>
+                <div class="col-sm-8">
+                    <span  th:text="${conference.location.country}"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">City</label>
+                <div class="col-sm-8">
+                    <span th:text="${conference.location.city}"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Street</label>
+                <div class="col-sm-8">
+                    <span  th:text="${conference.location.street}"></span>
+                </div>
+            </div>
+
+            <hr/>
+
+            <a th:href="@{/organizer/conference/{id}/edit(id=${conference.id})}">
+                <button type="button" class="btn btn-primary">Edit</button>
+            </a>
+
+        </div>
+    </div>
+
+    <div>
+        <!--/*@thymesVar id="lectures" type="java.util.List<org.osc.oss.confoo.core.lecture.Lecture>"*/-->
+        <h3>Lectures</h3>
+        <table class="table">
+            <tr th:each="lecture : ${lectures}">
+                <td th:text="${lecture.title}">Title</td>
+                <td th:text="${lecture.speaker.name}">Speaker</td>
+                <td th:text="${lecture.track.name}">Track</td>
+                <td th:text="${lecture.startTime}">Time</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="right">
+                    <a th:href="@{/organizer/conference/{conferenceId}/lecture/add(conferenceId=${conference.id})}"><button type="button">Add lecture</button></a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</main>
+<footer th:replace="organizer/footer.html"></footer>
+
+</body>
+</html>
