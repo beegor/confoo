@@ -24,7 +24,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Track</label>
                     <div class="col-sm-8">
-                        <select class="form-control" th:field="*{trackIndex}" onchange="trackChanged(this.value)">
+                        <select class="form-control" th:field="*{track}" onchange="trackChanged(this.value)">
                             <option value="-1">--</option>
                             <option th:each="tr: ${conference.tracks}" th:value="${tr.index}" th:text="${tr.name}"></option>
                             <option value="-2">Add new track</option>

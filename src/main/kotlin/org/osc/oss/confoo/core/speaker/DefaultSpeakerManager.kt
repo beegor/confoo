@@ -10,6 +10,10 @@ class DefaultSpeakerManager(private val repository: SpeakerRepository) : Speaker
         return repository.findByOrganizerId(organizerId)
     }
 
+    override fun getSpeaker(speakerId: Long) : Speaker? {
+        return repository.findById(speakerId).orElse(null)
+    }
+
     override fun save(speaker: Speaker): Speaker {
         return repository.save(speaker)
     }

@@ -1,9 +1,11 @@
 package org.osc.oss.confoo.web.organizer
 
 import org.osc.oss.confoo.core.conference.ConferenceManager
+import org.osc.oss.confoo.core.lecture.LectureManager
 import org.osc.oss.confoo.core.organizer.OrganizerManager
 import org.osc.oss.confoo.core.user.UserManager
 import org.osc.oss.confoo.dto.ConferenceDTO
+import org.osc.oss.confoo.dto.LectureDTO
 import org.osc.oss.confoo.dto.OrganizerDTO
 import org.osc.oss.confoo.web.ForbiddenException
 import org.osc.oss.confoo.web.NoSuchResourceException
@@ -17,6 +19,7 @@ import org.springframework.web.bind.support.SessionStatus
 @SessionAttributes("conference")
 class OrganizerConferenceController(private val conferenceManager: ConferenceManager,
                                     private val organizerManager: OrganizerManager,
+                                    private var lectureManager: LectureManager,
                                     private val userManager: UserManager) {
 
     @GetMapping("/organizer/conference/list")
@@ -40,6 +43,7 @@ class OrganizerConferenceController(private val conferenceManager: ConferenceMan
         if (conference.organizer.id != organizer.id)
             throw ForbiddenException()
         model.addAttribute("conference", ConferenceDTO(conference))
+        model.addAttribute("lectures", lectureManager.getLectures(conference.id).map { LectureDTO(it) })
         return "organizer/conference/conference-details"
     }
 

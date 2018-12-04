@@ -10,6 +10,10 @@ class DefaultLectureManager(val repository: LectureRepository) : LectureManager 
         return repository.findAll()
     }
 
+    override fun getLecture(lectureId: Long): Lecture? {
+        return repository.findById(lectureId).orElse(null)
+    }
+
     override fun save(lecture: Lecture): Lecture {
         return repository.save(lecture)
     }

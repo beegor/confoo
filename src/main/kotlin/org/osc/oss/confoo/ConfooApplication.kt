@@ -9,3 +9,4 @@ class ConfooApplication
 fun main(args: Array<String>) {
     runApplication<ConfooApplication>(*args)
 }
+

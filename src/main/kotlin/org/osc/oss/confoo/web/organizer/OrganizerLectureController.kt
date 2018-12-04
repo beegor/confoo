@@ -5,6 +5,7 @@ import org.osc.oss.confoo.core.lecture.LectureManager
 import org.osc.oss.confoo.core.organizer.OrganizerManager
 import org.osc.oss.confoo.core.speaker.SpeakerManager
 import org.osc.oss.confoo.core.user.UserManager
+import org.osc.oss.confoo.dto.ConferenceDTO
 import org.osc.oss.confoo.dto.LectureDTO
 import org.osc.oss.confoo.dto.SpeakerDTO
 import org.osc.oss.confoo.dto.TrackDTO
@@ -35,8 +36,8 @@ class OrganizerLectureController (private val userManager: UserManager,
         if (conference.organizer.id != organizer.id)
             throw ForbiddenException()
         model.addAttribute("lecture", LectureDTO.empty())
-        model.addAttribute("conference", conference)
-        model.addAttribute("speakers", speakerManager.getSpeakers(organizer.id))
+        model.addAttribute("conference", ConferenceDTO(conference))
+        model.addAttribute("speakers", speakerManager.getSpeakers(organizer.id).map { SpeakerDTO(it) })
         return "organizer/lecture/edit-lecture"
     }
 
@@ -46,17 +47,46 @@ class OrganizerLectureController (private val userManager: UserManager,
             @ModelAttribute("lecture") lectureDTO: LectureDTO,
             model: Model, ss: SessionStatus): String {
 
-        val loggedInUser = userManager.getLoggedInUser() ?: throw ForbiddenException()
-        val organizer = organizerManager.getOrganizerForUser(loggedInUser.id) ?: throw ForbiddenException()
         val conference = conferenceManager.getConference(conferenceId) ?: throw NoSuchResourceException()
-        if (conference.organizer.id != organizer.id)
-            throw ForbiddenException()
-
         val lecture = lectureDTO.toLecture(conference)
         lectureManager.save(lecture)
         ss.setComplete()
         return "redirect:/organizer/conference/${conference.id}"
     }
+
+
+    @GetMapping("/organizer/conference/{conferenceId}/lecture/{lectureId}/edit")
+    fun showEditLectureForm(
+            @PathVariable conferenceId: Long,
+            @PathVariable lectureId: Long,
+            model: Model): String {
+
+        val loggedInUser = userManager.getLoggedInUser() ?: throw ForbiddenException()
+        val organizer = organizerManager.getOrganizerForUser(loggedInUser.id) ?: throw ForbiddenException()
+        val conference = conferenceManager.getConference(conferenceId) ?: throw NoSuchResourceException()
+        val lecture = lectureManager.getLecture(lectureId) ?: throw NoSuchResourceException()
+        if (lecture.conference.organizer.id != organizer.id)
+            throw ForbiddenException()
+        model.addAttribute("conference", ConferenceDTO(conference))
+        model.addAttribute("lecture", LectureDTO.empty())
+        model.addAttribute("speakers", speakerManager.getSpeakers(organizer.id).map { SpeakerDTO(it) })
+        return "organizer/lecture/edit-lecture"
+    }
+
+    @PostMapping("/organizer/conference/{conferenceId}/lecture/{lectureId}/edit")
+    fun processEditLectureForm(
+            @PathVariable lectureId: Long,
+            @PathVariable conferenceId: Long,
+            @ModelAttribute("lecture") lectureDTO: LectureDTO,
+            model: Model, ss: SessionStatus): String {
+
+        val conference = conferenceManager.getConference(conferenceId) ?: throw NoSuchResourceException()
+        val lecture = lectureDTO.toLecture(conference)
+        lectureManager.save(lecture)
+        ss.setComplete()
+        return "redirect:/organizer/conference/${conference.id}"
+    }
+
 
 
     @PostMapping("/organizer/conference/{conferenceId}/lecture/speaker/add")
