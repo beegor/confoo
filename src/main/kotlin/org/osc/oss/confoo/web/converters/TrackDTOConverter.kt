@@ -7,6 +7,9 @@ import org.springframework.core.convert.converter.Converter
 class TrackDTOConverter(private val conferenceManager: ConferenceManager) : Converter<String, TrackDTO> {
 
     override fun convert(source: String): TrackDTO? {
+
+        if (source == "-1" || source == "-2")
+            return null
         val confIdAndTrackIndex = source.split("-")
         val conferenceId = confIdAndTrackIndex[0].toLong()
         val trackIndex = confIdAndTrackIndex[1].toInt()

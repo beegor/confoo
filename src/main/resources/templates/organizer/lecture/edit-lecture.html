@@ -24,9 +24,12 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Track</label>
                     <div class="col-sm-8">
-                        <select class="form-control" th:field="*{track}" onchange="trackChanged(this.value)">
+                        <select class="form-control" name="track" id="track" onchange="trackChanged(this.value)">
                             <option value="-1">--</option>
-                            <option th:each="tr: ${conference.tracks}" th:value="${tr.index}" th:text="${tr.name}"></option>
+                            <option th:each="tr: ${conference.tracks}" th:value="${conference.id} + '-' + ${tr.index}"
+                                    th:text="${tr.name}"
+                                    th:selected="${lecture.track.index == tr.index}">
+                            </option>
                             <option value="-2">Add new track</option>
                         </select>
                     </div>
@@ -35,9 +38,13 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Speaker</label>
                     <div class="col-sm-8">
-                        <select class="form-control" th:field="*{speaker}" onchange="speakerChanged(this.value)">
+                        <select class="form-control" name="speaker" id="speaker" onchange="speakerChanged(this.value)">
                             <option value="-1">--</option>
-                            <option th:each="sp: ${speakers}" th:value="${sp.id}" th:text="${sp.name}"></option>
+                            <option th:each="sp: ${speakers}" th:value="${sp.id}"
+                                    th:text="${sp.name}"
+                                    th:selected="${lecture.speaker.id == sp.id}">
+
+                            </option>
                             <option value="0">Add new speaker</option>
                         </select>
                     </div>

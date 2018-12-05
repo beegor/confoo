@@ -68,7 +68,7 @@ class OrganizerLectureController (private val userManager: UserManager,
         if (lecture.conference.organizer.id != organizer.id)
             throw ForbiddenException()
         model.addAttribute("conference", ConferenceDTO(conference))
-        model.addAttribute("lecture", LectureDTO.empty())
+        model.addAttribute("lecture", LectureDTO(lecture))
         model.addAttribute("speakers", speakerManager.getSpeakers(organizer.id).map { SpeakerDTO(it) })
         return "organizer/lecture/edit-lecture"
     }

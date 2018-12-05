@@ -89,6 +89,11 @@
                 <td th:text="${lecture.speaker.name}">Speaker</td>
                 <td th:text="${lecture.track.name}">Track</td>
                 <td th:text="${lecture.startTime}">Time</td>
+                <td>
+                    <a th:href="@{/organizer/conference/{conferenceId}/lecture/{lectureId}/edit(conferenceId=${conference.id}, lectureId=${lecture.id})}">
+                        <button class="btn btn-secondary">Edit</button>
+                    </a>
+                </td>
             </tr>
             <tr>
                 <td colspan="4" align="right">
