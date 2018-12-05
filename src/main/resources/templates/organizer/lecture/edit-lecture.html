@@ -42,7 +42,7 @@
                             <option value="-1">--</option>
                             <option th:each="sp: ${speakers}" th:value="${sp.id}"
                                     th:text="${sp.name}"
-                                    th:selected="${lecture.speaker.id == sp.id}">
+                                    th:selected="${lecture.speaker?.id == sp.id}">
 
                             </option>
                             <option value="0">Add new speaker</option>
