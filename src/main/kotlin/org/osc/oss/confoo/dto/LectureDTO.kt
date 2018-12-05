@@ -4,7 +4,6 @@ import org.osc.oss.confoo.core.conference.Conference
 import org.osc.oss.confoo.core.lecture.AudienceLevel
 import org.osc.oss.confoo.core.lecture.Lecture
 import org.springframework.format.annotation.DateTimeFormat
-import java.lang.RuntimeException
 import java.time.LocalDateTime
 
 class LectureDTO (

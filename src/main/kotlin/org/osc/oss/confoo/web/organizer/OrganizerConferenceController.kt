@@ -6,10 +6,8 @@ import org.osc.oss.confoo.core.organizer.OrganizerManager
 import org.osc.oss.confoo.core.user.UserManager
 import org.osc.oss.confoo.dto.ConferenceDTO
 import org.osc.oss.confoo.dto.LectureDTO
-import org.osc.oss.confoo.dto.OrganizerDTO
 import org.osc.oss.confoo.web.ForbiddenException
 import org.osc.oss.confoo.web.NoSuchResourceException
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -28,7 +26,7 @@ class OrganizerConferenceController(private val conferenceManager: ConferenceMan
         val loggedInUser = userManager.getLoggedInUser() ?: throw ForbiddenException()
         val organizer = organizerManager.getOrganizerForUser(loggedInUser.id) ?: throw ForbiddenException()
         model.addAttribute("organizer", organizer)
-        val conferenceList = conferenceManager.getConferenceList(organizer.id, PageRequest.of(page ?: 0, 10))
+        val conferenceList = conferenceManager.getConferenceList(organizer.id)
         model.addAttribute("conferences", conferenceList.map { ConferenceDTO(it) })
         return "organizer/conference/list-conferences"
     }

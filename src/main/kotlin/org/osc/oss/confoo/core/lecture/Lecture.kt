@@ -3,7 +3,6 @@ package org.osc.oss.confoo.core.lecture
 import org.osc.oss.confoo.core.conference.Conference
 import org.osc.oss.confoo.core.speaker.Speaker
 import org.osc.oss.confoo.core.track.Track
-import java.time.Instant
 import java.time.LocalDateTime
 import javax.persistence.*
 

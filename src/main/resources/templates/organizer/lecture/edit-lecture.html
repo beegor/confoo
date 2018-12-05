@@ -28,7 +28,7 @@
                             <option value="-1">--</option>
                             <option th:each="tr: ${conference.tracks}" th:value="${conference.id} + '-' + ${tr.index}"
                                     th:text="${tr.name}"
-                                    th:selected="${lecture.track.index == tr.index}">
+                                    th:selected="${lecture.track?.index == tr.index}">
                             </option>
                             <option value="-2">Add new track</option>
                         </select>
