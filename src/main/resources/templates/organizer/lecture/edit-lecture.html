@@ -177,9 +177,10 @@
 </div>
 
 
-<script type="text/javascript">
+<script th:inline="javascript">
 
     $(function () {
+        var conferenceId =  /*[[${conference.id}]]*/ 0;
         $('#startTime').datetimepicker({format: "YYYY-MM-DD HH:mm", ignoreReadonly: true });
 
         $("#addSpeakerForm").ajaxForm({
@@ -193,7 +194,7 @@
 
         $("#addTrackForm").ajaxForm({
             success: function(response, statusText, xhr, $form){
-                var o = new Option(response.name, response.index, false, true);
+                var o = new Option(response.name, conferenceId + "-" + response.index, false, true);
                 $(o).html(response.name);
                 $("#track").append(o);
                 $("#addTrackModal").modal("hide");
