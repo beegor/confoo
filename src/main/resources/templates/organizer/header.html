@@ -23,7 +23,7 @@
 
                     <!--prikazi sljedeci link samo ako nitko nije ulogiran-->
                     <li sec:authorize="!isAuthenticated()" class="nav-item" >
-                        <a class="nav-link" th:href="@{/user/register}">
+                        <a class="nav-link" th:href="@{/organizer/register}">
                             Organizer registration
                         </a>
                     </li>

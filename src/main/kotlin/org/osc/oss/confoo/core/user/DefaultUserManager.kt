@@ -21,6 +21,10 @@ class DefaultUserManager(private val repository: UserRepository) : UserManager {
         return repository.findById(userId).orElse(null)
     }
 
+    override fun getUserByUsername(username: String): User? {
+        return repository.findByLogin(username)
+    }
+
     override fun save(user: User) : User {
         return repository.save(user)
     }
