@@ -12,7 +12,7 @@
 
     <!--/*@thymesVar id="conference" type="org.osc.oss.confoo.core.conference.Conference"*/-->
 
-    <div class="card mx-auto" style="width: 40rem">
+    <div class="card mx-auto" >
 
         <h5 class="card-header">Conference data</h5>
         <div class="card-body">
@@ -80,23 +80,31 @@
         </div>
     </div>
 
-    <div>
+    <div style="margin-top: 2em">
         <!--/*@thymesVar id="lectures" type="java.util.List<org.osc.oss.confoo.dto.LectureDTO>"*/-->
         <h3>Lectures</h3>
         <table class="table">
+            <tr>
+                <th>Title</th>
+                <th>Speaker</th>
+                <th>Track</th>
+                <th>Time</th>
+                <th></th>
+            </tr>
+
             <tr th:each="lecture : ${lectures}">
                 <td th:text="${lecture.title}">Title</td>
                 <td th:text="${lecture.speaker.name}">Speaker</td>
                 <td th:text="${lecture.track.name}">Track</td>
                 <td th:text="${lecture.startTime}">Time</td>
-                <td>
+                <td align="right">
                     <a th:href="@{/organizer/conference/{conferenceId}/lecture/{lectureId}/edit(conferenceId=${conference.id}, lectureId=${lecture.id})}">
                         <button class="btn btn-secondary">Edit</button>
                     </a>
                 </td>
             </tr>
             <tr>
-                <td colspan="4" align="right">
+                <td colspan="5" align="right">
                     <a th:href="@{/organizer/conference/{conferenceId}/lecture/add(conferenceId=${conference.id})}"><button type="button">Add lecture</button></a>
                 </td>
             </tr>

@@ -18,14 +18,15 @@
         <h5 class="card-header">Lecture data</h5>
         <div class="card-body">
 
-            <form th:object="${lecture}" method="post">
-
+            <form id="edit-lecture-form" th:object="${lecture}" method="post">
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Track</label>
                     <div class="col-sm-8">
-                        <select class="form-control" name="track" id="track" onchange="trackChanged(this.value)">
-                            <option value="-1">--</option>
+                        <select class="form-control" name="track" id="track" onchange="trackChanged(this.value)"
+                                data-bv-notempty=""
+                                data-bv-notempty-message="Track must be selected">
+                            <option value="">--</option>
                             <option th:each="tr: ${conference.tracks}" th:value="${conference.id} + '-' + ${tr.index}"
                                     th:text="${tr.name}"
                                     th:selected="${lecture.track?.index == tr.index}">
@@ -38,8 +39,10 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Speaker</label>
                     <div class="col-sm-8">
-                        <select class="form-control" name="speaker" id="speaker" onchange="speakerChanged(this.value)">
-                            <option value="-1">--</option>
+                        <select class="form-control" name="speaker" id="speaker" onchange="speakerChanged(this.value)"
+                                data-bv-notempty=""
+                                data-bv-notempty-message="Speaker must be selected">
+                            <option value="">--</option>
                             <option th:each="sp: ${speakers}" th:value="${sp.id}"
                                     th:text="${sp.name}"
                                     th:selected="${lecture.speaker?.id == sp.id}">
@@ -53,35 +56,44 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Title</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" th:field="*{title}">
+                        <input type="text" class="form-control" th:field="*{title}"
+                               data-bv-notempty="" data-bv-notempty-message="Title is required">
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Summary</label>
                     <div class="col-sm-8">
-                        <textarea  class="form-control" th:field="*{summary}" rows="3"></textarea>
+                        <textarea  class="form-control" th:field="*{summary}" rows="3"
+                                   data-bv-notempty="" data-bv-notempty-message="Summary is required"></textarea>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Room</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" th:field="*{room}"/>
+                        <input type="text" class="form-control" th:field="*{room}"
+                               data-bv-notempty="" data-bv-notempty-message="Room is required"/>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Start time</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" th:field="*{startTime}"/>
+                        <input type="text" readonly="readonly" class="form-control" th:field="*{startTime}"
+                               data-bv-notempty="" data-bv-notempty-message="Start time is required"/>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Duration (minutes)</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" readonly="readonly" th:field="*{durationMinutes}"/>
+                        <input type="text" class="form-control" th:field="*{durationMinutes}"
+                               data-bv-notempty="" data-bv-notempty-message="Duration must be number greater or equal to 10"
+                               data-bv-integer="" data-bv-integer-message="Duration must be number greater or equal to 10"
+                               data-bv-greaterthan="" data-bv-greaterthan-value="10"
+                               data-bv-greaterthan-message="Duration must be number greater or equal to 10"
+                               />
                     </div>
                 </div>
 
@@ -126,20 +138,22 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">First and last name</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="name"
+                               data-bv-notempty="" data-bv-notempty-message="Name is required">
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">Short bio</label>
                     <div class="col-sm-8">
-                        <textarea class="form-control" name="bio"></textarea>
+                        <textarea class="form-control" name="bio"
+                                  data-bv-notempty="" data-bv-notempty-message="Bio is required"></textarea>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deselectSpeaker()">Close</button>
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
             </form>
@@ -162,13 +176,14 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Track name</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" name="name">
+                            <input type="text" class="form-control" name="name"
+                                   data-bv-notempty="" data-bv-notempty-message="Name is required" />
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deselectTrack();">Close</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
@@ -182,6 +197,10 @@
     $(function () {
         var conferenceId =  /*[[${conference.id}]]*/ 0;
         $('#startTime').datetimepicker({format: "YYYY-MM-DD HH:mm", ignoreReadonly: true });
+
+        $("#edit-lecture-form").bootstrapValidator({verbose: false});
+        $("#addTrackForm").bootstrapValidator({verbose: false});
+        $("#addSpeakerForm").bootstrapValidator({verbose: false});
 
         $("#addSpeakerForm").ajaxForm({
             success: function(response, statusText, xhr, $form){
@@ -210,6 +229,14 @@
     function trackChanged(trackSelectValue){
         if (trackSelectValue == -2)
             $("#addTrackModal").modal("show");
+    }
+
+    function deselectTrack(){
+        $("#track").val("");
+    }
+
+    function deselectSpeaker(){
+        $("#speaker").val("");
     }
 
 </script>

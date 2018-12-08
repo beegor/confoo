@@ -10,7 +10,7 @@ class ConferenceDTO (
 
     var name: String,
 
-    val description: String,
+    var description: String,
 
     var startDate: LocalDate,
 
