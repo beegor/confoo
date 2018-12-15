@@ -20,15 +20,13 @@ class LectureDTO (
 
         var room: String,
 
-        startTime: LocalDateTime,
+        @field:DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
+        var startTime: LocalDateTime,
 
         var durationMinutes: Int,
 
         var targetAudienceLevel: AudienceLevel
 ) {
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
-    var startTime: LocalDateTime = startTime
 
     constructor(l: Lecture) : this(l.id, TrackDTO(l.track), SpeakerDTO(l.speaker), l.title, l.summary, l.room, l.startTime, l.durationMinutes, l.targetAudienceLevel)
 
