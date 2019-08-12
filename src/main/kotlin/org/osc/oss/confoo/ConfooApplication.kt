@@ -7,6 +7,6 @@ import org.springframework.boot.runApplication
 class ConfooApplication
 
 fun main(args: Array<String>) {
+
     runApplication<ConfooApplication>(*args)
 }
-
