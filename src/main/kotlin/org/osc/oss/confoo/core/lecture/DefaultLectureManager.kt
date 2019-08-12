@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 class DefaultLectureManager(val repository: LectureRepository) : LectureManager {
 
     override fun getLectures(conferenceId: Long): List<Lecture> {
-        return repository.findAll()
+        return repository.findAllByConferenceId(conferenceId)
     }
 
     override fun getLecture(lectureId: Long): Lecture? {
