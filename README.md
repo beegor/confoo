@@ -1,6 +1,6 @@
 **Prerequisites** 
 
-1. Java 8 JDK installed on system
+1. Java 8 or latter JDK installed on system
 2. PostgreSQL database installed  
 db name: confoo, username: confoo, password confoo  
 you can change this in src/main/resources/application.properties
